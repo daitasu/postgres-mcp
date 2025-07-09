@@ -10,7 +10,19 @@ Implementation of PostgreSQL Model Context Protocol (MCP) server. Enables read-o
 
 ## Installation
 
+### From npm
+
 ```bash
+npm install -g @daitasu/postgres-mcp
+```
+
+### From source
+
+```bash
+# Clone the repository
+git clone https://github.com/daitasu/postgres-mcp.git
+cd postgres-mcp
+
 # Install dependencies
 pnpm install
 
@@ -19,14 +31,45 @@ pnpm run build
 ```
 
 ## Configuration
-### Using node command
+
+### Using npx (Recommended)
+
+Add to your Claude Desktop or MCP client configuration:
 
 ```json
 {
   "mcpServers": {
-    "postgres-local": {
+    "postgres": {
+      "command": "npx",
+      "args": ["@daitasu/postgres-mcp", "postgresql://user:password@localhost:5432/database"]
+    }
+  }
+}
+```
+
+### Using global installation
+
+If you installed globally:
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "postgres-mcp",
+      "args": ["postgresql://user:password@localhost:5432/database"]
+    }
+  }
+}
+```
+
+### Using local installation
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
       "command": "node",
-      "args": ["/absolute/path/to/postgres-mcp/dist/index.js", "postgresql://user:password@localhost:5432/database"]
+      "args": ["/path/to/postgres-mcp/dist/index.js", "postgresql://user:password@localhost:5432/database"]
     }
   }
 }
@@ -35,6 +78,13 @@ pnpm run build
 ### Command-line execution
 
 ```bash
+# Using npx (no installation required)
+npx @daitasu/postgres-mcp postgresql://user:password@localhost:5432/database
+
+# Using global installation
+postgres-mcp postgresql://user:password@localhost:5432/database
+
+# Using node directly
 node dist/index.js postgresql://user:password@localhost:5432/database
 ```
 
