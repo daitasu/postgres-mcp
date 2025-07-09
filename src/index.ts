@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { z } from 'zod';
 import pg from 'pg';
+import { z } from 'zod';
 import { createResourceHandlers } from './handlers/resourceHandlers.js';
 import { createToolHandlers } from './handlers/toolHandlers.js';
 
@@ -17,7 +17,7 @@ const main = async (): Promise<void> => {
   }
 
   const databaseUrl = args[0];
-  
+
   const pool = new pg.Pool({
     connectionString: databaseUrl,
   });
@@ -41,7 +41,7 @@ const main = async (): Promise<void> => {
     },
     async (input: { sql: string }) => {
       const result = await toolHandlers.executeQuery(input);
-      
+
       return result.match(
         (rows) => ({
           content: [
@@ -52,10 +52,12 @@ const main = async (): Promise<void> => {
           ],
         }),
         (error) => {
-          throw new Error(`Query error: ${error.message}${error.detail ? ` (${error.detail})` : ''}`);
-        }
+          throw new Error(
+            `Query error: ${error.message}${error.detail ? ` (${error.detail})` : ''}`,
+          );
+        },
       );
-    }
+    },
   );
 
   // List tables tool
@@ -67,7 +69,7 @@ const main = async (): Promise<void> => {
     },
     async () => {
       const result = await resourceHandlers.listTables();
-      
+
       return result.match(
         (tables) => ({
           content: [
@@ -79,9 +81,9 @@ const main = async (): Promise<void> => {
         }),
         (error) => {
           throw new Error(`Failed to list tables: ${error.message}`);
-        }
+        },
       );
-    }
+    },
   );
 
   // Get table schema tool
@@ -95,7 +97,7 @@ const main = async (): Promise<void> => {
     },
     async (input: { tableName: string }) => {
       const result = await resourceHandlers.getTableSchema(input.tableName);
-      
+
       return result.match(
         (columns) => ({
           content: [
@@ -107,9 +109,9 @@ const main = async (): Promise<void> => {
         }),
         (error) => {
           throw new Error(`Failed to get table schema: ${error.message}`);
-        }
+        },
       );
-    }
+    },
   );
 
   const transport = new StdioServerTransport();

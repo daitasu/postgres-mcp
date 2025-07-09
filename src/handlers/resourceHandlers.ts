@@ -1,19 +1,24 @@
-import { Pool } from 'pg';
-import { ok, err, Result } from 'neverthrow';
-import { SCHEMA_PATH, TableInfo, ColumnInfo, PostgresError } from '../types/postgres.js';
+import { err, ok, type Result } from 'neverthrow';
+import type { Pool } from 'pg';
+import {
+  type ColumnInfo,
+  type PostgresError,
+  SCHEMA_PATH,
+  type TableInfo,
+} from '../types/postgres.js';
 
 export const createResourceHandlers = (pool: Pool) => {
   const listTables = async (): Promise<Result<TableInfo[], PostgresError>> => {
     const client = await pool.connect();
     try {
       const result = await client.query<{ table_name: string }>(
-        "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
+        "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'",
       );
-      
-      const tableInfos: TableInfo[] = result.rows.map(row => ({
+
+      const tableInfos: TableInfo[] = result.rows.map((row) => ({
         tableName: row.table_name,
       }));
-      
+
       return ok(tableInfos);
     } catch (error) {
       const pgError: PostgresError = {
@@ -26,12 +31,17 @@ export const createResourceHandlers = (pool: Pool) => {
     }
   };
 
-  const getTableSchema = async (tableName: string): Promise<Result<ColumnInfo[], PostgresError>> => {
+  const getTableSchema = async (
+    tableName: string,
+  ): Promise<Result<ColumnInfo[], PostgresError>> => {
     const client = await pool.connect();
     try {
-      const result = await client.query<{ column_name: string; data_type: string }>(
+      const result = await client.query<{
+        column_name: string;
+        data_type: string;
+      }>(
         'SELECT column_name, data_type FROM information_schema.columns WHERE table_name = $1',
-        [tableName]
+        [tableName],
       );
 
       if (result.rows.length === 0) {
@@ -41,7 +51,7 @@ export const createResourceHandlers = (pool: Pool) => {
         });
       }
 
-      const columnInfos: ColumnInfo[] = result.rows.map(row => ({
+      const columnInfos: ColumnInfo[] = result.rows.map((row) => ({
         columnName: row.column_name,
         dataType: row.data_type,
       }));
@@ -73,7 +83,7 @@ export const createResourceHandlers = (pool: Pool) => {
       }
 
       return ok(tableName);
-    } catch (error) {
+    } catch (_error) {
       return err({
         code: 'URI_PARSE_ERROR',
         message: 'Failed to parse resource URI',

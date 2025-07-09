@@ -9,28 +9,31 @@
     "dev": "tsx watch src/index.ts",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src/**/*.ts",
+    "lint": "biome check src/",
+    "lintfix": "biome check --fix src/",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["mcp", "postgresql", "database"],
+  "keywords": [
+    "mcp",
+    "postgresql",
+    "database"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.15.0",
+    "neverthrow": "^8.2.0",
     "pg": "^8.16.3",
-    "zod": "^3.25.76",
-    "neverthrow": "^8.2.0"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.1.1",
     "@types/node": "^24.0.12",
     "@types/pg": "^8.15.4",
-    "@typescript-eslint/eslint-plugin": "^8.36.0",
-    "@typescript-eslint/parser": "^8.36.0",
-    "eslint": "^9.30.0",
+    "@vitest/coverage-v8": "^2.1.8",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.8",
-    "@vitest/coverage-v8": "^2.1.8"
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=20"
