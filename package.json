@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
-    "test": "vitest",
+    "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "biome check src/",
     "lintfix": "biome check --fix src/",
@@ -30,10 +30,10 @@
     "@biomejs/biome": "^2.1.1",
     "@types/node": "^24.0.12",
     "@types/pg": "^8.15.4",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/coverage-v8": "^3.2.4",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.8"
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=20"
